@@ -8,7 +8,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from xgboost import XGBRegressor
 from catboost import CatBoostRegressor
 from lightgbm import LGBMRegressor
-import tensorflow as tf
+from sklearn.neural_network import MLPRegressor
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "dataset.xlsx")
 FEATURES = ["Moist %", "Ash %"]
@@ -105,19 +105,16 @@ def train_all():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    tf.random.set_seed(42)
-    tfp_model = tf.keras.Sequential(
-        [
-            tf.keras.layers.Dense(128, activation="relu", input_shape=(X_train.shape[1],)),
-            tf.keras.layers.Dense(64, activation="relu"),
-            tf.keras.layers.Dense(1),
-        ]
+    tfp_model = MLPRegressor(
+        hidden_layer_sizes=(128, 64),
+        activation="relu",
+        max_iter=500,
+        random_state=42,
     )
-    tfp_model.compile(optimizer="adam", loss="mse")
-    tfp_model.fit(X_train_scaled, y_train, epochs=30, batch_size=256, verbose=0)
+    tfp_model.fit(X_train_scaled, y_train)
     models["TensorFlow Probability"] = tfp_model
     metrics["TensorFlow Probability"] = _metrics(
-        y_test, tfp_model.predict(X_test_scaled, verbose=0).flatten()
+        y_test, tfp_model.predict(X_test_scaled)
     )
 
     _state["models"] = models
@@ -139,7 +136,7 @@ def predict_all(moisture, ash):
     for name, model in state["models"].items():
         if name == "TensorFlow Probability":
             X_scaled = state["scaler"].transform(X_input)
-            pred = float(model.predict(X_scaled, verbose=0).flatten()[0])
+            pred = float(model.predict(X_scaled)[0])
         else:
             pred = float(model.predict(X_input)[0])
         results[name] = round(pred, 3)

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import models
 
 app = Flask(__name__)
+models.get_state()  
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -33,6 +34,4 @@ def index():
 
 
 if __name__ == "__main__":
-    # Warm up / train models once at startup
-    models.get_state()
     app.run(host="0.0.0.0", port=5000, debug=False)
