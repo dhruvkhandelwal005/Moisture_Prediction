@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eq. M% Predictor</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .sub { color: #666; margin-top: 0; margin-bottom: 24px; }
+  form { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 24px; }
+  .field { display: flex; flex-direction: column; }
+  label { font-size: 0.85rem; color: #444; margin-bottom: 4px; }
+  input[type=number] { padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; width: 160px; font-size: 1rem; }
+  button { padding: 9px 18px; border: none; background: #1a1a1a; color: #fff; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  button:hover { background: #333; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+  th { color: #555; font-weight: 600; font-size: 0.85rem; }
+  .metric { color: #888; font-size: 0.8rem; }
+  .error { color: #b00020; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+  <h1>Eq. M% Predictor</h1>
+  <p class="sub">Enter Moisture % and Ash % to get predictions from all 5 models.</p>
+
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <form method="POST">
+    <div class="field">
+      <label for="moisture">Moisture %</label>
+      <input type="number" step="any" id="moisture" name="moisture" value="{{ moisture }}" required>
+    </div>
+    <div class="field">
+      <label for="ash">Ash %</label>
+      <input type="number" step="any" id="ash" name="ash" value="{{ ash }}" required>
+    </div>
+    <button type="submit">Predict</button>
+  </form>
+
+  {% if predictions %}
+  <table>
+    <thead>
+      <tr><th>Model</th><th>Predicted Eq. M%</th><th>Test R²</th><th>Test RMSE</th></tr>
+    </thead>
+    <tbody>
+      {% for name, value in predictions.items() %}
+      <tr>
+        <td>{{ name }}</td>
+        <td><strong>{{ value }}</strong></td>
+        <td class="metric">{{ metrics[name].r2 }}</td>
+        <td class="metric">{{ metrics[name].rmse }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,9 @@
+flask
+pandas
+openpyxl
+scikit-learn
+xgboost
+catboost
+lightgbm
+tensorflow-cpu
+gunicorn
