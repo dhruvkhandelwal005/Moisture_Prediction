@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request
 import models
 
-app = Flask(__name__)
-models.get_state()  
+app = Flask(__name__)  
 
 
 @app.route("/", methods=["GET", "POST"])
