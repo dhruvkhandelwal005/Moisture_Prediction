@@ -8,19 +8,21 @@ app = Flask(__name__)
 def index():
     predictions = None
     metrics = None
-    moisture = ash = ""
+    moisture = ash = gcv = ""
     error = None
 
     if request.method == "POST":
         moisture = request.form.get("moisture", "")
         ash = request.form.get("ash", "")
+        gcv = request.form.get("gcv", "")
         try:
             moisture_val = float(moisture)
             ash_val = float(ash)
-            predictions = models.predict_all(moisture_val, ash_val)
+            gcv_val = float(gcv)
+            predictions = models.predict_all(moisture_val, ash_val, gcv_val)
             metrics = models.get_state()["metrics"]
         except ValueError:
-            error = "Please enter valid numeric values for both fields."
+            error = "Please enter valid numeric values for all fields."
 
     return render_template(
         "index.html",
@@ -28,6 +30,7 @@ def index():
         metrics=metrics,
         moisture=moisture,
         ash=ash,
+        gcv=gcv,
         error=error,
     )
 

@@ -129,7 +129,7 @@ def get_state():
     return _state
 
 
-def predict_all(moisture, ash):
+def predict_all(moisture, ash, gcv):
     state = get_state()
     X_input = pd.DataFrame([[moisture, ash]], columns=FEATURES)
     results = {}
@@ -139,5 +139,11 @@ def predict_all(moisture, ash):
             pred = float(model.predict(X_scaled)[0])
         else:
             pred = float(model.predict(X_input)[0])
-        results[name] = round(pred, 3)
+
+        calculated_gcv = gcv * (100 - pred) / (100 - moisture)
+
+        results[name] = {
+            "eq_moisture": round(pred, 3),
+            "gcv": round(calculated_gcv, 3),
+        }
     return results

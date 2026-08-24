@@ -35,19 +35,24 @@
       <label for="ash">Ash %</label>
       <input type="number" step="any" id="ash" name="ash" value="{{ ash }}" required>
     </div>
+    <div class="field">
+      <label for="gcv">GCV</label>
+      <input type="number" step="any" id="gcv" name="gcv" value="{{ gcv }}" required>
+    </div>
     <button type="submit">Predict</button>
   </form>
 
   {% if predictions %}
   <table>
     <thead>
-      <tr><th>Model</th><th>Predicted Eq. M%</th><th>Test R²</th><th>Test RMSE</th></tr>
+      <tr><th>Model</th><th>Predicted Eq. M%</th><th>Calculated GCV</th><th>Test R²</th><th>Test RMSE</th></tr>
     </thead>
     <tbody>
-      {% for name, value in predictions.items() %}
+      {% for name, result in predictions.items() %}
       <tr>
         <td>{{ name }}</td>
-        <td><strong>{{ value }}</strong></td>
+        <td><strong>{{ result.eq_moisture }}</strong></td>
+        <td><strong>{{ result.gcv }}</strong></td>
         <td class="metric">{{ metrics[name].r2 }}</td>
         <td class="metric">{{ metrics[name].rmse }}</td>
       </tr>
