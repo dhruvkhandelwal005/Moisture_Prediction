@@ -2,63 +2,1028 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Eq. M% Predictor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Coal Equilibrium Moisture Prediction</title>
+
 <style>
-  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
-  h1 { font-size: 1.4rem; margin-bottom: 4px; }
-  .sub { color: #666; margin-top: 0; margin-bottom: 24px; }
-  form { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 24px; }
-  .field { display: flex; flex-direction: column; }
-  label { font-size: 0.85rem; color: #444; margin-bottom: 4px; }
-  input[type=number] { padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; width: 160px; font-size: 1rem; }
-  button { padding: 9px 18px; border: none; background: #1a1a1a; color: #fff; border-radius: 6px; font-size: 1rem; cursor: pointer; }
-  button:hover { background: #333; }
-  table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
-  th { color: #555; font-weight: 600; font-size: 0.85rem; }
-  .metric { color: #888; font-size: 0.8rem; }
-  .error { color: #b00020; margin-bottom: 16px; }
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f8;
+    color: #243447;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    background: #17324d;
+    color: white;
+    padding: 28px 40px;
+    border-bottom: 4px solid #087e8b;
+}
+
+.header-inner {
+    max-width: 1180px;
+    margin: auto;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.brand {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #9ed9df;
+}
+
+.status {
+    font-size: 0.75rem;
+    background: #234a69;
+    color: #d9f1f3;
+    padding: 6px 11px;
+    border-radius: 4px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.header p {
+    margin: 7px 0 0;
+    color: #c9d6e2;
+    font-size: 0.92rem;
+}
+
+/* ================= MAIN ================= */
+
+.container {
+    max-width: 1180px;
+    margin: 32px auto 50px;
+    padding: 0 20px;
+}
+
+/* ================= CARD ================= */
+
+.card {
+    background: #ffffff;
+    border: 1px solid #dce2e7;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(23, 50, 77, 0.06);
+}
+
+.card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e5e9ed;
+}
+
+.card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #17324d;
+    margin: 0;
+}
+
+.card-description {
+    margin: 5px 0 0;
+    font-size: 0.83rem;
+    color: #718096;
+}
+
+/* ================= INPUT ================= */
+
+.input-body {
+    padding: 24px;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 18px;
+    align-items: end;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #40566c;
+    margin-bottom: 7px;
+}
+
+.input-help {
+    font-size: 0.70rem;
+    color: #8996a3;
+    margin-top: 5px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+input[type="number"] {
+    width: 100%;
+    height: 44px;
+    padding: 10px 60px 10px 12px;
+    border: 1px solid #cbd4dc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #243447;
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.15s ease,
+                box-shadow 0.15s ease;
+}
+
+input[type="number"]:hover {
+    border-color: #9aaab8;
+}
+
+input[type="number"]:focus {
+    border-color: #087e8b;
+    box-shadow: 0 0 0 2px rgba(8, 126, 139, 0.12);
+}
+
+input::placeholder {
+    color: #a7b1ba;
+}
+
+.unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: #7c8b98;
+}
+
+/* ================= BUTTON ================= */
+
+button {
+    height: 44px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 5px;
+    background: #087e8b;
+    color: white;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+button:hover {
+    background: #066b76;
+}
+
+button:active {
+    background: #055c65;
+}
+
+/* ================= ERROR ================= */
+
+.error {
+    margin: 0 24px 18px;
+    padding: 11px 14px;
+    background: #fff4f3;
+    border: 1px solid #f1c5c1;
+    border-left: 4px solid #c94b43;
+    border-radius: 4px;
+    color: #9b3029;
+    font-size: 0.83rem;
+}
+
+/* ================= WORKFLOW ================= */
+
+.workflow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
+    background: #f7f9fa;
+    border-bottom: 1px solid #e5e9ed;
+}
+
+.workflow-box {
+    text-align: center;
+    padding: 12px 10px;
+    background: white;
+    border: 1px solid #dce2e7;
+    border-radius: 5px;
+}
+
+.workflow-title {
+    font-size: 0.72rem;
+    color: #7b8794;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+}
+
+.workflow-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #17324d;
+}
+
+.workflow-arrow {
+    color: #087e8b;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* ================= RESULTS ================= */
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.model-count {
+    font-size: 0.75rem;
+    color: #087e8b;
+    background: #e8f5f6;
+    border: 1px solid #c8e7e9;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* ================= SUMMARY ================= */
+
+.summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid #e5e9ed;
+}
+
+.summary-box {
+    padding: 20px 24px;
+    border-right: 1px solid #e5e9ed;
+}
+
+.summary-box:last-child {
+    border-right: none;
+}
+
+.summary-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #7b8794;
+    margin-bottom: 7px;
+}
+
+.summary-value {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #17324d;
+}
+
+.summary-unit {
+    font-size: 0.75rem;
+    color: #718096;
+    font-weight: 400;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrapper {
+    padding: 20px 24px 24px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f1f4f6;
+}
+
+th {
+    padding: 12px 14px;
+    text-align: left;
+    color: #526679;
+    font-size: 0.73rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+    border-bottom: 2px solid #d8e0e6;
+}
+
+td {
+    padding: 13px 14px;
+    font-size: 0.84rem;
+    border-bottom: 1px solid #e7ebee;
+    color: #40566c;
+}
+
+tbody tr:hover {
+    background: #f8fafb;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.model-name {
+    color: #17324d;
+    font-weight: 600;
+}
+
+.prediction {
+    color: #087e8b;
+    font-weight: 700;
+}
+
+.r2-value {
+    color: #2e7d5b;
+    font-weight: 600;
+}
+
+.rmse-value {
+    color: #526679;
+}
+
+/* ================= FORMULA ================= */
+
+.formula-box {
+    margin-top: 18px;
+    padding: 15px 17px;
+    background: #faf8f1;
+    border: 1px solid #eadfbf;
+    border-left: 3px solid #d89b2b;
+    border-radius: 5px;
+}
+
+.formula-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #806c3d;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.formula {
+    font-family: "Times New Roman", serif;
+    font-size: 1rem;
+    color: #493f29;
+}
+
+.formula-description {
+    margin-top: 6px;
+    font-size: 0.75rem;
+    color: #806c3d;
+}
+
+/* ================= INFORMATION ================= */
+
+.info-section {
+    padding: 0 24px 24px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.info-box {
+    background: #f7f9fa;
+    border: 1px solid #e1e6ea;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.info-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #7b8794;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 0.83rem;
+    color: #40566c;
+    font-weight: 500;
+}
+
+/* ================= FOOTER ================= */
+
+.footer {
+    max-width: 1180px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    text-align: center;
+    color: #8996a3;
+    font-size: 0.72rem;
+}
+
+.footer-line {
+    height: 1px;
+    background: #dce2e7;
+    margin-bottom: 15px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    form button {
+        width: 100%;
+    }
+
+    .workflow {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-arrow {
+        transform: rotate(90deg);
+        text-align: center;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .header {
+        padding: 24px 20px;
+    }
+
+    .header h1 {
+        font-size: 1.6rem;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-box {
+        border-right: none;
+        border-bottom: 1px solid #e5e9ed;
+    }
+
+    .summary-box:last-child {
+        border-bottom: none;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-header,
+    .input-body,
+    .table-wrapper,
+    .info-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
 </style>
 </head>
+
+
 <body>
-  <h1>Eq. M% Predictor</h1>
-  <p class="sub">Enter Moisture % and Ash % to get predictions from all 5 models.</p>
 
-  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+<!-- ================= HEADER ================= -->
 
-  <form method="POST">
-    <div class="field">
-      <label for="moisture">Moisture %</label>
-      <input type="number" step="any" id="moisture" name="moisture" value="{{ moisture }}" required>
-    </div>
-    <div class="field">
-      <label for="ash">Ash %</label>
-      <input type="number" step="any" id="ash" name="ash" value="{{ ash }}" required>
-    </div>
-    <div class="field">
-      <label for="gcv">GCV</label>
-      <input type="number" step="any" id="gcv" name="gcv" value="{{ gcv }}" required>
-    </div>
-    <button type="submit">Predict</button>
-  </form>
+<header class="header">
 
-  {% if predictions %}
-  <table>
-    <thead>
-      <tr><th>Model</th><th>Predicted Eq. M%</th><th>Calculated GCV</th><th>Test R²</th><th>Test RMSE</th></tr>
-    </thead>
-    <tbody>
-      {% for name, result in predictions.items() %}
-      <tr>
-        <td>{{ name }}</td>
-        <td><strong>{{ result.eq_moisture }}</strong></td>
-        <td><strong>{{ result.gcv }}</strong></td>
-        <td class="metric">{{ metrics[name].r2 }}</td>
-        <td class="metric">{{ metrics[name].rmse }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
+    <div class="header-inner">
+
+        <div class="header-top">
+
+            <div class="brand">
+                Coal Analysis • Machine Learning
+            </div>
+
+            <div class="status">
+                Prediction System
+            </div>
+
+        </div>
+
+        <h1>Equilibrium Moisture Prediction</h1>
+
+        <p>
+            Machine learning based estimation of equilibrium moisture
+            from air-dried coal properties.
+        </p>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+
+    <!-- INPUT CARD -->
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <h2 class="card-title">
+                Coal Sample Parameters
+            </h2>
+
+            <p class="card-description">
+                Enter the measured properties of the coal sample.
+                Moisture and Ash are used by the prediction models,
+                while GCV<sub>ad</sub> is used for GCV<sub>em</sub> calculation.
+            </p>
+
+        </div>
+
+
+        <div class="input-body">
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+
+                <!-- MOISTURE -->
+
+                <div class="field">
+
+                    <label for="moisture">
+                        Moisture % (ADB)
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            step="any"
+                            id="moisture"
+                            name="moisture"
+                            value="{{ moisture }}"
+                            placeholder="e.g. 5.13"
+                            required
+                        >
+
+                        <span class="unit">
+                            %
+                        </span>
+
+                    </div>
+
+                    <span class="input-help">
+                        ML prediction input
+                    </span>
+
+                </div>
+
+
+                <!-- ASH -->
+
+                <div class="field">
+
+                    <label for="ash">
+                        Ash % (ADB)
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            step="any"
+                            id="ash"
+                            name="ash"
+                            value="{{ ash }}"
+                            placeholder="e.g. 30.37"
+                            required
+                        >
+
+                        <span class="unit">
+                            %
+                        </span>
+
+                    </div>
+
+                    <span class="input-help">
+                        ML prediction input
+                    </span>
+
+                </div>
+
+
+                <!-- GCV -->
+
+                <div class="field">
+
+                    <label for="gcv">
+                        GCV<sub>ad</sub>
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            step="any"
+                            id="gcv"
+                            name="gcv"
+                            value="{{ gcv }}"
+                            placeholder="e.g. 4749"
+                            required
+                        >
+
+                        <span class="unit">
+                            kcal/kg
+                        </span>
+
+                    </div>
+
+                    <span class="input-help">
+                        Used for GCV<sub>em</sub> calculation
+                    </span>
+
+                </div>
+
+
+                <button type="submit">
+                    Run Prediction
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= WORKFLOW ================= -->
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <h2 class="card-title">
+                Prediction Workflow
+            </h2>
+
+            <p class="card-description">
+                How the input parameters are used by the system.
+            </p>
+
+        </div>
+
+
+        <div class="workflow">
+
+            <div class="workflow-box">
+
+                <div class="workflow-title">
+                    ML Inputs
+                </div>
+
+                <div class="workflow-value">
+                    Moisture<sub>ADB</sub> + Ash<sub>ADB</sub>
+                </div>
+
+            </div>
+
+
+            <div class="workflow-arrow">
+                →
+            </div>
+
+
+            <div class="workflow-box">
+
+                <div class="workflow-title">
+                    Machine Learning
+                </div>
+
+                <div class="workflow-value">
+                    Trained Prediction Models
+                </div>
+
+            </div>
+
+
+            <div class="workflow-arrow">
+                →
+            </div>
+
+
+            <div class="workflow-box">
+
+                <div class="workflow-title">
+                    Output
+                </div>
+
+                <div class="workflow-value">
+                    Equilibrium Moisture
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= RESULTS ================= -->
+
+    {% if predictions %}
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <div class="results-header">
+
+                <div>
+
+                    <h2 class="card-title">
+                        Prediction Results
+                    </h2>
+
+                    <p class="card-description">
+                        Comparison of equilibrium moisture predictions
+                        across the trained machine learning models.
+                    </p>
+
+                </div>
+
+                <div class="model-count">
+                    {{ predictions|length }} Models
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INPUT SUMMARY -->
+
+        <div class="summary">
+
+            <div class="summary-box">
+
+                <div class="summary-label">
+                    Moisture<sub>ADB</sub>
+                </div>
+
+                <div class="summary-value">
+                    {{ moisture }}
+                    <span class="summary-unit">%</span>
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div class="summary-label">
+                    Ash<sub>ADB</sub>
+                </div>
+
+                <div class="summary-value">
+                    {{ ash }}
+                    <span class="summary-unit">%</span>
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div class="summary-label">
+                    GCV<sub>ad</sub>
+                </div>
+
+                <div class="summary-value">
+                    {{ gcv }}
+                    <span class="summary-unit">kcal/kg</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Model
+                        </th>
+
+                        <th>
+                            Predicted EM
+                        </th>
+
+                        <th>
+                            Calculated GCV<sub>em</sub>
+                        </th>
+
+                        <th>
+                            Test R²
+                        </th>
+
+                        <th>
+                            Test RMSE
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for name, result in predictions.items() %}
+
+                    <tr>
+
+                        <td class="model-name">
+                            {{ name }}
+                        </td>
+
+                        <td class="prediction">
+                            {{ result.eq_moisture }} %
+                        </td>
+
+                        <td>
+                            {{ result.gcv }}
+                            kcal/kg
+                        </td>
+
+                        <td class="r2-value">
+                            {{ metrics[name].r2 }}
+                        </td>
+
+                        <td class="rmse-value">
+                            {{ metrics[name].rmse }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <!-- FORMULA -->
+
+            <div class="formula-box">
+
+                <div class="formula-title">
+                    GCV<sub>em</sub> Calculation
+                </div>
+
+                <div class="formula">
+                    GCV<sub>em</sub> =
+                    GCV<sub>ad</sub>
+                    ×
+                    (100 − EM) /
+                    (100 − Moisture<sub>ad</sub>)
+                </div>
+
+                <div class="formula-description">
+                    GCV<sub>em</sub> is calculated using the supplied
+                    GCV<sub>ad</sub>, measured air-dried moisture, and
+                    model-predicted equilibrium moisture.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="info-section">
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        ML Input 01
+                    </div>
+
+                    <div class="info-value">
+                        Moisture % (ADB)
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        ML Input 02
+                    </div>
+
+                    <div class="info-value">
+                        Ash % (ADB)
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Prediction Target
+                    </div>
+
+                    <div class="info-value">
+                        Equilibrium Moisture at 60% RH
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+    {% endif %}
+
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-line"></div>
+
+    Coal Equilibrium Moisture Prediction System
+    <br>
+
+    Machine Learning Based Analytical Framework
+
+</footer>
+
+
 </body>
 </html>
