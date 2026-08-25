@@ -97,8 +97,8 @@ def train_all():
         n_estimators=300, learning_rate=0.05, max_depth=4, random_state=42
     )
     darts_model.fit(X_train, y_train)
-    models["Darts Hybrid"] = darts_model
-    metrics["Darts Hybrid"] = _metrics(y_test, darts_model.predict(X_test))
+    models["GradientBoosting Regression"] = darts_model
+    metrics["GradientBoosting Regression"] = _metrics(y_test, darts_model.predict(X_test))
 
     # 5. TensorFlow Probability (feed-forward NN, scaled inputs)
     scaler = StandardScaler()
